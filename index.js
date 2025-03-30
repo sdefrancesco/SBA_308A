@@ -1,5 +1,6 @@
 import Countries, { fetchCountries } from "./countries.js";
 import { sortCountries } from './sort.js';
+import ScrollToTop from './scrollToTop.js'
 
 const parent = document.querySelector('#countries');
 const sortBtn = document.getElementById('sortBtn');
@@ -49,7 +50,7 @@ const createCard = (name, flag, countryData) => {
 const renderFlag = (flag) => {
     let flagImg = document.createElement('img');
     flagImg.src = flag;
-    flagImg.width = '50';
+    flagImg.width = '70';
     flagImg.height = '50';
     return flagImg;
 };
@@ -60,8 +61,16 @@ const populateCountries = async (sort, countriesList) => {
         sortCountries(countriesList);
     }
 
-    countriesList.forEach((country) => {
+    countriesList.forEach((country, index) => {
         createCol(3, parent, country.name.common, country.flags.png, country);
+            anime({
+                targets: parent.children[index], 
+                opacity: [0, 1], 
+                translateY: [20, 0], 
+                duration: 1000, 
+                delay: index * 100, 
+                easing: 'easeOutSine', 
+            });
     });
 
     updateCountryCount(countriesList);
@@ -84,12 +93,13 @@ const openModal = (countryData) => {
     const modalContent = document.getElementById('modalContent');
     modalContent.innerHTML = `
         <div class="text-center">
-            <img src="${countryData.flags.png}" width="100" height="100" alt="${countryData.name.common} flag" />
+            <img className="mb-4 mt-4" src="${countryData.flags.png}" width="150" height="100" alt="${countryData.name.common} flag" />
             <h3 class="mt-3">${countryData.name.common}</h3>
             <p><strong>Capital:</strong> ${countryData.capital ? countryData.capital[0] : 'N/A'}</p>
             <p><strong>Region:</strong> ${countryData.region}</p>
             <p><strong>Population:</strong> ${countryData.population.toLocaleString()}</p>
             <p><strong>Area:</strong> ${countryData.area.toLocaleString()} km²</p>
+            <p><a href=${countryData.maps.googleMaps}>View Map Location</a></p>
         </div>
     `;
     
@@ -104,7 +114,16 @@ const closeModal = () => {
     modal.hide();
 };
 
+
+
 document.addEventListener('DOMContentLoaded', async () => {
+    anime({
+        targets: '#needle',
+        rotate: '360', 
+        duration: 2000, 
+        easing: 'linear', 
+        loop: true, 
+    });
     try {
         countries = await fetchCountries();
         filteredCountries = countries; 
@@ -128,6 +147,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         sortBtn.addEventListener('click', () => {
             sort()
         });
+
+        ScrollToTop(document.getElementById('scrollToTop'))
     } catch (err) {
         console.log(err);
     }
