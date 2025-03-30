@@ -8,11 +8,32 @@
     <title>SBA 308 A</title>
 </head>
 <body>
-    <div class="sticky-top pb-3" id="nav">
-        <div class="container pt-4">
-            <h1>Countries</h1>
-            <h6>These are all the official countries in the world.</h6>
+    <div class="sticky-top" id="nav">
+        <div class="pb-3" id="header">
+            <div class="container pt-4">
+                <h1>Countries Of The World</h1>
+                <h6>These are all the official countries of the world.</h6>
+            </div>
         </div>
+        <div class="pb-3 pt-4" id="filter">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="" class="form-label me-3">Filter</label>
+                            <form action="" class="form">
+                                <input type="search" class='form-control blur' id="search" placeholder="Search By Name"/>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="">
+                        <button class="btn btn-primary btn-sm" id="sortBtn">Sort Countries Alphabetically</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="container">
         <h6 class="mt-5">Countries (<span id="countryCount"></span>)</h6>
