@@ -117,13 +117,7 @@ const closeModal = () => {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    anime({
-        targets: '#needle',
-        rotate: '360', 
-        duration: 2000, 
-        easing: 'linear', 
-        loop: true, 
-    });
+
     try {
         countries = await fetchCountries();
         filteredCountries = countries; 

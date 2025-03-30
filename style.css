@@ -34,5 +34,6 @@ body {
 
 
 #scrollToTop {
-    cursor: pointer
+    cursor: pointer;
+    display: none
 }
