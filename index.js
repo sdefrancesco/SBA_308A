@@ -14,14 +14,14 @@ const sort = () => {
     populateCountries(false, filteredCountries);
 };
 
-const createCol = (size, parent, name, flag) => {
+const createCol = (size, parent, name, flag, countryData) => {
     let col = document.createElement('div');
     col.classList.add(`col-lg-${size}`);
-    col.appendChild(createCard(name, flag));
+    col.appendChild(createCard(name, flag, countryData));
     parent.appendChild(col);
 };
 
-const createCard = (name, flag) => {
+const createCard = (name, flag, countryData) => {
     let card = document.createElement('div');
     let cardBody = document.createElement('div');
     card.classList.add('card');
@@ -36,6 +36,11 @@ const createCard = (name, flag) => {
     title.classList.add('mt-3');
     title.innerHTML = name;
     cardBody.appendChild(title);
+
+    // click event listener to the card to open the modal
+    card.addEventListener('click', () => {
+        openModal(countryData);
+    });
 
     card.appendChild(cardBody);
     return card;
@@ -56,7 +61,7 @@ const populateCountries = async (sort, countriesList) => {
     }
 
     countriesList.forEach((country) => {
-        createCol(3, parent, country.name.common, country.flags.png);
+        createCol(3, parent, country.name.common, country.flags.png, country);
     });
 
     updateCountryCount(countriesList);
@@ -74,19 +79,44 @@ const updateCountryCount = (array) => {
     document.getElementById('countryCount').innerHTML = array.length;
 };
 
+// modal - related
+const openModal = (countryData) => {
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+        <div class="text-center">
+            <img src="${countryData.flags.png}" width="100" height="100" alt="${countryData.name.common} flag" />
+            <h3 class="mt-3">${countryData.name.common}</h3>
+            <p><strong>Capital:</strong> ${countryData.capital ? countryData.capital[0] : 'N/A'}</p>
+            <p><strong>Region:</strong> ${countryData.region}</p>
+            <p><strong>Population:</strong> ${countryData.population.toLocaleString()}</p>
+            <p><strong>Area:</strong> ${countryData.area.toLocaleString()} km²</p>
+        </div>
+    `;
+    
+    // show bootstrap modal
+    const modal = new bootstrap.Modal(document.getElementById('countryModal'));
+    modal.show();
+};
+
+// close modal
+const closeModal = () => {
+    const modal = new bootstrap.Modal(document.getElementById('countryModal'));
+    modal.hide();
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // fetch the full list of countries
         countries = await fetchCountries();
         filteredCountries = countries; 
         populateCountries(false, filteredCountries);
 
-        // add the search functionality
+        // search functionality
         document.getElementById('search').addEventListener('input', (e) => {
             if (e.target.value.length < 1) {
-                // reset to the full list if search term is empty
+                // reset if search term is empty
                 filteredCountries = countries;
                 populateCountries(false, filteredCountries);
+                sortBtn.removeAttribute('disabled')
             } else {
                 // apply the filter based on the search term
                 filteredCountries = filterCountries(e.target.value, countries);
@@ -94,6 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
+        // sort Button Event Listener
         sortBtn.addEventListener('click', () => {
             sort()
         });
