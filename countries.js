@@ -4,7 +4,7 @@ let Countries = [];
 export const fetchCountries = async () => {
     try {
         const response = await axios.get('https://restcountries.com/v3.1/all');
-        Countries = response.data;
+        Countries = response.data
         console.log('Countries fetched:', Countries);
         return Countries;  // Return the populated Countries array
     } catch (err) {

@@ -1,4 +1,5 @@
 import Countries, { fetchCountries } from "./countries.js";
+import {sortCountries } from './sort.js'
 const parent = document.getElementById('countries');
 
 const createCol = (size, parent, name, flag) => {
@@ -39,14 +40,20 @@ const renderFlag = (flag) => {
 const populateCountries = async () => {
     try {
         let countries = await fetchCountries()
+        sortCountries(countries)
         countries.forEach((country) => {
             createCol(3, parent, country.name.common, country.flags.png);
         });
+        updateCountryCount(countries)
     } catch(err) {
         console.log(err)
     }
 
-};
+}
+
+const updateCountryCount = (array) => {
+    document.getElementById('countryCount').innerHTML = array.length
+}
 
 
 document.addEventListener('DOMContentLoaded', async () => {
