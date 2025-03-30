@@ -1,4 +1,4 @@
-SBA 308 A by sebastian defrancesco
+SBA 308 A by Sebastian DeFrancesco
 
 Countries of the World
 This web application showcases a list of all the official countries of the world. It allows users to explore information about each country, including its name, flag, capital, population, area, and more. The app also includes search and sort functionalities, with an animated fake lazy-loading feature that triggers the animations when the countries come into view.
